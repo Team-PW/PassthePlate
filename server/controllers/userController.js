@@ -1,23 +1,15 @@
 const cookieParser = require('cookie-parser');
 const db = require('../models/foodbankModel');
 
-
 const userController = {};
 
-let userReqBod;
-// let newUserReqBod;
-
 userController.verifyUser = (req, res, next) => {
-  // console.log("request body in Originalcontroller: ", req.body)
-  console.log(req.body);
-  userReqBod = req.body;
-  // res.redirect('/redirect')
   // find user in database
   // console.log('testing userReqBod: ', userReqBod)
-  const queryString = `SELECT username, password, zipcode, id FROM "user" WHERE username = '${userReqBod.username}' AND password = '${userReqBod.password}' AND zipcode = ${userReqBod.zipcode}`;
+  const queryString = `SELECT username, password, zipcode, id FROM "userinfo" WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND zipcode = ${req.body.zipcode}`;
   db.query(queryString)
     .then((data) => {
-      // console.log('request body in verifyUser controller: ', userReqBod)
+      console.log('data', data);
       // console.log('should log user inputted in login form', data.rows)
       if (data.rows.length !== 0) {
         // if user is found, redirect to home page (currently set to '/listings')
@@ -29,7 +21,6 @@ userController.verifyUser = (req, res, next) => {
         // res.redirect('/home')
       }
       // if user cannot be found, redirect to default path '/'
-      // console.log('user not found...', data.rows)
       return res.redirect('/');
     })
     .catch((err) => {
@@ -37,13 +28,10 @@ userController.verifyUser = (req, res, next) => {
     });
 };
 
-let recentData;
-
 userController.findListings = (req, res, next) => {
   console.log('made it to findListings controller');
   const queryString = `SELECT l.*, u.username FROM listing l inner join "user" u on u.id = l.user_id WHERE l.zipcode = ${req.cookies.zipcode}`;
   // testing route handler for finding listing based on zipcode
-
   db.query(queryString)
     .then((data) => {
       console.log('data from listings', data.rows);
@@ -56,22 +44,16 @@ userController.findListings = (req, res, next) => {
   // res.locals.listings = 'database response';
 };
 
-let listingReqBod;
-
 userController.postListing = (req, res, next) => {
-  listingReqBod = req.body;
-  console.log('posting a listing thru postman: ', listingReqBod);
-  const queryString = `INSERT INTO listing (title, listing_body, zipcode, user_id) VALUES ('${listingReqBod.title}', '${listingReqBod.listingBody}', ${req.cookies.zipcode}, ${req.cookies.userID})`;
+  console.log('posting a listing thru postman: ', req.body);
+  const queryString = `INSERT INTO listing (title, listing_body, zipcode, user_id) VALUES ('${req.body.title}', '${req.body.listingBody}', ${req.cookies.zipcode}, ${req.cookies.userID})`;
   db.query(queryString)
     .then((data) => next())
     .catch((err) => console.error('Error in postListing middleware: ', err));
 };
 
-let commentReqBod;
-
 userController.postComment = (req, res, next) => {
-  commentReqBod = req.body;
-  console.log('posting a comment thru postman: ', commentReqBod);
+  console.log('posting a comment thru postman: ', req.body);
   const queryString = 'INSERT INTO comment (comment_body)';
 };
 
@@ -89,14 +71,62 @@ userController.getComments = (req, res, next) => {
     .catch((err) => console.error('Error in findListings middleware: ', err));
 };
 
-
 userController.createUser = (req, res, next) => {
   // create user in database
+  const queryString = 'SELECT username FROM "userinfo"';
+  let currentLength;
+  db.query(queryString)
+    .then((response) => {
+      console.log(response);
+      currentLength = response.rowCount;
+      console.log(currentLength);
+    })
+    .then((data) => {
+      const queryString1 = `INSERT INTO "userinfo"
+    VALUES ('${req.body.username}', '${req.body.password}', ${
+        req.body.zipcode
+      }, '${currentLength + 1}')`;
+      db.query(queryString1);
+      return next();
+    })
+    .catch((error) => console.log('error:', error));
   // if username already exists, redirect to default path '/'
   // if user is successfully created, redirect to home page
-  res.redirect('/redirect');
-  return next();
-};
 
+  //   return next();
+  // }
+  // creatingUser();
+};
+/** Nick's possibly working SQL create user code...     */
+// userController.createUser = async (req, res, next) => {
+//   try {
+//     console.log("userController.createUser middleware is working");
+
+//     //capture article_link value and user value from front end request body
+//     const { userName, password, zipcode } = req.body;
+
+//     //define query parameters ($1 = article_link, $2 = user)
+//     const queryParams = [username, userid, zipcode];
+
+//     //Define SQL query
+//     const text = `
+//         INSERT INTO articles (userName, password, zipcode)
+//         VALUES ($1, $2, $3)
+//         `;
+
+//     //Run SQL query
+//     const result = await db.query(text, queryParams);
+//     res.locals.user = result;
+//     return next();
+//   } catch (err) {
+//     return next({
+//       log: `error from new userCreator: ERROR : ${err}`,
+//       message: {
+//         err: "Error occurred in articleController.addArticle. Check server logs for more detail",
+//       },
+//       status: 500,
+//     });
+//   }
+// };
 
 module.exports = userController;
