@@ -8,7 +8,7 @@ userController.verifyUser = (req, res, next) => {
   // console.log('testing userReqBod: ', userReqBod)
   const queryString = `SELECT username, password, zipcode, id FROM "userinfo" WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND zipcode = ${req.body.zipcode}`;
   db.query(queryString)
-    .then((data) => {
+    .then(data => {
       console.log('data', data);
       // console.log('should log user inputted in login form', data.rows)
       if (data.rows.length !== 0) {
@@ -23,7 +23,7 @@ userController.verifyUser = (req, res, next) => {
       // if user cannot be found, redirect to default path '/'
       return res.redirect('/');
     })
-    .catch((err) => {
+    .catch(err => {
       console.error('Error in verifyUser middleware: ', err);
     });
 };
@@ -33,12 +33,12 @@ userController.findListings = (req, res, next) => {
   const queryString = `SELECT l.*, u.username FROM listing l inner join "user" u on u.id = l.user_id WHERE l.zipcode = ${req.cookies.zipcode}`;
   // testing route handler for finding listing based on zipcode
   db.query(queryString)
-    .then((data) => {
+    .then(data => {
       console.log('data from listings', data.rows);
       res.locals.listings = data.rows;
       return next();
     })
-    .catch((err) => console.error('Error in findListings middleware: ', err));
+    .catch(err => console.error('Error in findListings middleware: ', err));
 
   // Query SQL DB for SELECT * WHERE userReqBody === zipcode_id
   // res.locals.listings = 'database response';
@@ -48,8 +48,8 @@ userController.postListing = (req, res, next) => {
   console.log('posting a listing thru postman: ', req.body);
   const queryString = `INSERT INTO listing (title, listing_body, zipcode, user_id) VALUES ('${req.body.title}', '${req.body.listingBody}', ${req.cookies.zipcode}, ${req.cookies.userID})`;
   db.query(queryString)
-    .then((data) => next())
-    .catch((err) => console.error('Error in postListing middleware: ', err));
+    .then(data => next())
+    .catch(err => console.error('Error in postListing middleware: ', err));
 };
 
 userController.postComment = (req, res, next) => {
@@ -62,13 +62,13 @@ userController.getComments = (req, res, next) => {
   const queryString = `SELECT comment_body FROM comment WHERE listing_id = ${req.cookies.id}`; // testing route handler for finding listing based on zipcode
 
   db.query(queryString)
-    .then((data) => {
+    .then(data => {
       // console.log('data from listings', data.rows)
 
       res.locals.comments = data.rows;
       return next();
     })
-    .catch((err) => console.error('Error in findListings middleware: ', err));
+    .catch(err => console.error('Error in findListings middleware: ', err));
 };
 
 userController.createUser = (req, res, next) => {
@@ -76,12 +76,10 @@ userController.createUser = (req, res, next) => {
   const queryString = 'SELECT username FROM "userinfo"';
   let currentLength;
   db.query(queryString)
-    .then((response) => {
-      console.log(response);
+    .then(response => {
       currentLength = response.rowCount;
-      console.log(currentLength);
     })
-    .then((data) => {
+    .then(data => {
       const queryString1 = `INSERT INTO "userinfo"
     VALUES ('${req.body.username}', '${req.body.password}', ${
         req.body.zipcode
@@ -89,7 +87,7 @@ userController.createUser = (req, res, next) => {
       db.query(queryString1);
       return next();
     })
-    .catch((error) => console.log('error:', error));
+    .catch(error => console.log('error:', error));
   // if username already exists, redirect to default path '/'
   // if user is successfully created, redirect to home page
 
