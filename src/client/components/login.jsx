@@ -5,29 +5,32 @@ import React from 'react';
 
 function Login() {
   return (
-    <form method="post">
+    <form method='post'>
       <label>
         Username:
-        <input type="text" name="username" />
+        <input type='text' name='username' />
       </label>
       <br />
       <label>
         Password:
-        <input type="password" name="password" />
+        <input type='password' name='password' />
       </label>
       <br />
       <label>
         Zip Code:
-        <input type="text" name="zipcode" />
+        <input type='text' name='zipcode' />
       </label>
       <br />
-      <div className="button-div">
-        <button type="submit" formAction="/login">Login</button>
-        <button type="submit" formAction="/login">Sign Up</button>
+      <div className='button-div'>
+        <button type='submit' formAction='/login'>
+          Login
+        </button>
+        <button type='submit' formAction='/signup'>
+          Sign Up
+        </button>
       </div>
     </form>
   );
 }
-
 
 export default Login;
