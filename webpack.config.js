@@ -4,7 +4,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-
 module.exports = {
   entry: {
     home: path.join(__dirname, 'src', 'home.jsx'),
@@ -45,9 +44,12 @@ module.exports = {
       inject: true,
       filename: 'index.html',
       chunks: ['login'],
-    })],
+    }),
+  ],
   devServer: {
+    host: 'localhost',
     port: 8080,
+    hot: true,
     proxy: {
       '/': 'http://localhost:1234',
     },
