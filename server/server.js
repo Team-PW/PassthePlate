@@ -9,7 +9,7 @@ const listingsController = require('./controllers/listingsController');
 const app = express();
 
 // parse the req.body, the cookies, and urlencoded data
-app.use(bodyParser.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -26,7 +26,7 @@ app.post('/login', userController.verifyUser, (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, '../dist/home.html'));
 });
 
-app.get('/listings', userController.findListings, (req, res) => {
+app.get('/listings', listingsController.findListings, (req, res) => {
   console.log('made it to redirect');
   console.log(res.locals.listings);
   res.cookie('listing', res.locals.listings);
@@ -39,12 +39,23 @@ app.post('/postlisting', listingsController.postListing, (req, res) => {
   res.status(200).json(res.locals.newListing);
 });
 
-app.post('/postcomment', userController.postComment, (req, res) => {
+app.post('/postcomment', listingsController.postComment, (req, res) => {
   res.send(200);
 });
 
-app.get('/comments', userController.getComments, (req, res) => {
+app.get('/comments', listingsController.getComments, (req, res) => {
   res.send(200).json(res.locals.comments);
+});
+
+app.use((err, req, res, next) => {
+  const defaultErr = {
+    log: `Express error handler caught unknown middleware error: ${err}`,
+    status: 500,
+    message: { err: 'An error occurred' },
+  };
+  const errorObj = { ...defaultErr, ...err };
+  console.log(errorObj.log);
+  return res.status(errorObj.status).json(errorObj.message);
 });
 
 app.listen(1234, () => {

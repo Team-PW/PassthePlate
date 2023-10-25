@@ -6,9 +6,19 @@ import FullListing from './fullListing';
 import PostListing from './postListing';
 
 function CentralDisplay({
-  display, listings, displayFullListing, myListings, whichListing,
+  display,
+  listings,
+  displayFullListing,
+  myListings,
+  whichListing,
 }) {
   // what is displayed in this component is different depending on state
+  console.log('CENTRAL DISPLAY IS RUNNING, HERE ARE THE PROPS:');
+  console.log(`diplay: ${display}`);
+  console.log(`listings: ${listings}`);
+  console.log(`displayFullListing: ${displayFullListing}`);
+  console.log(`myListings: ${myListings}`);
+  console.log(`whichListing: ${whichListing}`);
 
   if (display === 'allListings' || display === 'ownListings') {
     // if display is either of these two values, a grid of listing
@@ -18,44 +28,42 @@ function CentralDisplay({
       // input: an array that is taken from state
       // output: an array of components
 
-      const result = [];
+      const result = data;
 
       data.forEach((elem, i) => {
-        result.push(<ListingPreview
-          elem={elem}
-          key={`listingPreview ${i}`}
-          displayFullListing={displayFullListing}
-        />);
+        result.push(
+          <ListingPreview
+            elem={elem}
+            key={`listingPreview ${i}`}
+            displayFullListing={displayFullListing}
+          />
+        );
       });
 
       return result;
     };
 
     // depending on display state, pass a different piece of state into the function
-    const listingPreviewArray = (display === 'allListings') ? createDisplayArray(listings) : createDisplayArray(myListings);
+    const listingPreviewArray =
+      display === 'allListings'
+        ? createDisplayArray(listings)
+        : createDisplayArray(myListings);
 
     return (
-      <div className="central-display-holder">
+      <div className='central-display-holder'>
         <h2>Food Pickup Listings</h2>
-        <div className="central-display">
-          {listingPreviewArray}
-        </div>
+        <div className='central-display'>{listingPreviewArray}</div>
       </div>
     );
   }
 
   if (display === 'fullListing') {
-    return (
-      <FullListing whichListing={whichListing} />
-    );
+    return <FullListing whichListing={whichListing} />;
   }
 
   if (display === 'postListing') {
-    return (
-      <PostListing />
-    );
+    return <PostListing />;
   }
 }
-
 
 export default CentralDisplay;
