@@ -14,9 +14,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.post('/signup', userController.createUser, (req, res) => {
-  console.log('new user request body in server: ', req.body);
+  res.redirect('/');
 });
-
 
 app.post('/login', userController.verifyUser, (req, res) => {
   // console.log("request body in server: ", req.body)
@@ -26,7 +25,6 @@ app.post('/login', userController.verifyUser, (req, res) => {
   res.cookie('userID', res.locals.userID);
   res.status(200).sendFile(path.resolve(__dirname, '../dist/home.html'));
 });
-
 
 app.get('/listings', userController.findListings, (req, res) => {
   console.log('made it to redirect');
