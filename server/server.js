@@ -35,9 +35,8 @@ app.get('/listings', userController.findListings, (req, res) => {
   res.status(200).json(res.locals.listings);
 });
 
-app.post('/postlisting', userController.postListing, (req, res) => {
-  console.log('successfully posted listing in database');
-  res.send(200);
+app.post('/postlisting', listingsController.postListing, (req, res) => {
+  res.status(200).json(res.locals.newListing);
 });
 
 app.post('/postcomment', userController.postComment, (req, res) => {

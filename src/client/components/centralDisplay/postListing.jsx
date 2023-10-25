@@ -14,7 +14,7 @@ function PostListing() {
         </label>
         <label>
           Description:
-          <input type='text-area' name='listing_body' />
+          <input type='text-area' name='listingBody' />
         </label>
         <button type='submit' formAction='/postlisting'>
           Post
