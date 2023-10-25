@@ -36,7 +36,7 @@ app.get('/listings', userController.findListings, (req, res) => {
 });
 
 app.post('/postlisting', listingsController.postListing, (req, res) => {
-  res.status(200).json(res.locals.newListing);
+  res.status(200).sendFile(path.resolve(__dirname, '../dist/home.html'));
 });
 
 app.post('/postcomment', userController.postComment, (req, res) => {

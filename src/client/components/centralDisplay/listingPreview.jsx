@@ -2,12 +2,14 @@ import React from 'react';
 
 function ListingPreview({ elem, displayFullListing }) {
   return (
-    <div className="listing-preview">
+    <div className='listing-preview'>
       <h3>{elem.title}</h3>
       <br />
-      <p>{elem.listing_body}</p>
+      <p>{elem.listingbody}</p>
       <br />
-      <button type="button" onClick={() => displayFullListing(elem)}>View full listing</button>
+      <button type='button' onClick={() => displayFullListing(elem)}>
+        View full listing
+      </button>
     </div>
   );
 }
