@@ -11,7 +11,6 @@ function App() {
   // most of state is stored in it
   // most of the functions that are used in the front end are in it
 
-
   const [listings, setListings] = useState([]);
   // this piece of state stores all the listings for a given zip code
 
@@ -48,8 +47,8 @@ function App() {
   // populate listings and myListings pieces of state with information from database
   useEffect(() => {
     fetch('/listings')
-      .then((data) => data.json())
-      .then((data) => {
+      .then(data => data.json())
+      .then(data => {
         // set listings to the data that comes back
         setListings(data);
 
@@ -86,18 +85,18 @@ function App() {
 
         // create myListings array by filtering through listings data and set it to state
         const newMyListings = [];
-        data.forEach((el) => {
+        data.forEach(el => {
           if (el.username === username) newMyListings.push(el);
         });
         setMyListings(newMyListings);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }, []);
 
   return (
     <>
       <h1>Pass the Plate</h1>
-      <div className="container">
+      <div className='container'>
         <Sidebar
           displayOwnListings={displayOwnListings}
           displayPostListing={displayPostListing}
