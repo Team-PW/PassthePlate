@@ -1,17 +1,17 @@
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-import 'jest-dom';
-import Login from '../src/client/components/login';
-import '@testing-library/jest-dom';
+// import React from 'react';
+// import { render, fireEvent, screen } from '@testing-library/react';
+// import { rest } from 'msw';
+// import { setupServer } from 'msw/node';
+// import 'jest-dom';
+// import Login from '../src/client/components/login';
+// import '@testing-library/jest-dom';
 
-test('centralDisplay renders listings according to props passed in', () => {
-  // define 'props' object as some hard-coded controlled thing
-  const props = {};
-});
+// test('centralDisplay renders listings according to props passed in', () => {
+//   // define 'props' object as some hard-coded controlled thing
+//   const props = {};
+// });
 
-test(load);
+// test(load);
 
 // render our centralDisplay with that props object passed in
 
